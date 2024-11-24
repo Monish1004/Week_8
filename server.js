@@ -1,32 +1,31 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
+
 app.use(cookieParser());
 
 app.get("/set-cookie" , (req , res)=>{
-    res.cookie("username" , "Monish", {maxAge: 1000*60*60*24*7} , {httpOnly: true});
-    res.send("Cookie is set");
+    res.cookie("username", "monish" , {maxAge: 1000*60*60*24*7} , {httpOnly: true});
+    res.send("Cookie is set successfully");
 });
 
 app.get("/get-cookie" , (req , res)=>{
     const username = req.cookies.username;
-    if(username){
-        res.send("Welcome back " + username);
-    }
-    else{
+    if(!username){
         res.send("No cookie found");
+        return;
     }
+    res.send(`Cookie found with value: ${username}`);
 });
 
-app.get("delete-cookie" , (req , res)=>{
+app.get("/delete-cookie" , (req , res)=>{
     const username = req.cookies.username;
-    if(username){
-        res.clearCookie("username");
-        res.send("Cookie deleted");
-    }
-    else{
+    if(!username){
         res.send("No cookie found");
+        return;
     }
+    res.clearCookie("username");
+    res.send("Cookie is deleted successfully");
 });
 
 app.listen(3000, () => {
